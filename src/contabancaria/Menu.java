@@ -13,20 +13,16 @@ public class Menu {
         Scanner scanner = new Scanner(System.in);
         Cores cores = new Cores();
 
-        Conta conta1 = new ContaCorrente(1, 123, 1, "Guilherme", 10000.0f, 1000.0f);
+        ContaCorrente conta1 = new ContaCorrente(1, 123, 1, "Guilherme", 10000.0f, 1000.0f);
 
         conta1.visualizar();
-
         conta1.sacar(12000.0f);
+        conta1.visualizar();
         conta1.depositar(5000.0f);
 
         ContaPoupanca contaPoupanca1 = new ContaPoupanca(2,123,2,"Rafael",100000.0f,15);
         contaPoupanca1.visualizar();
 
-        Conta conta2 = new Conta();
-        conta2.visualizar();
-        conta2.setTitular("Galvão");
-        conta2.visualizar();
 
        /* while (true) {
             System.out.println(Cores.TEXT_YELLOW + Cores.ANSI_BLACK_BACKGROUND + "****************************************************************");
