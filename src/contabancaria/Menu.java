@@ -1,5 +1,6 @@
 package contabancaria;
 
+import contabancaria.controller.ContaController;
 import contabancaria.model.Conta;
 import contabancaria.model.ContaCorrente;
 import contabancaria.model.ContaPoupanca;
@@ -10,19 +11,18 @@ import java.util.Scanner;
 
 public class Menu {
     public static void main(String[] args) {
-        int opcao;
+        int opcao, numero, agencia, tipo, aniversario;
+        float saldo, limite;
+        String titular;
         Scanner scanner = new Scanner(System.in);
         Cores cores = new Cores();
 
-        ContaCorrente conta1 = new ContaCorrente(1, 123, 1, "Guilherme", 10000.0f, 1000.0f);
+        ContaController contas = new ContaController();
 
-        conta1.visualizar();
-        conta1.sacar(12000.0f);
-        conta1.visualizar();
-        conta1.depositar(5000.0f);
+        ContaCorrente cc1 = new ContaCorrente(contas.gerarNumero(), 123, 1, "João", 10000.0f, 100.0f);
+        contas.cadastrar(cc1);//cadastrar conta cc1 na listaContas - CRIAR
 
-        ContaPoupanca contaPoupanca1 = new ContaPoupanca(2, 123, 2, "Rafael", 100000.0f, 15);
-        contaPoupanca1.visualizar();
+        contas.listarTodas();//Listando com base no metodo listarTodas() usando o visualizar()
 
 
         while (true) {
@@ -56,14 +56,41 @@ public class Menu {
             switch (opcao) {
                 case 1:
                     System.out.println("\nCriar Conta");
+                    System.out.println("\nDigite o Número da Agência: ");
+                    agencia = scanner.nextInt();
+                    System.out.println("\nDigite o Nome do Titular: ");
+                    scanner.skip("\\R?");//limpar o scanner
+                    titular = scanner.nextLine();
+                    System.out.println("\nDigite o Tipo da Conta(1-CC | 2-CP): ");
+                    tipo = scanner.nextInt();
+                    System.out.println("\nDigite o Saldo da conta: R$");
+                    saldo = scanner.nextFloat();
+                    switch (tipo) {
+                        case 1 -> {
+                            System.out.println("\nDigite o limite da conta: R$");
+                            limite = scanner.nextFloat();
+                            contas.cadastrar(new ContaCorrente(contas.gerarNumero(),agencia,tipo,titular,saldo,limite));
+                        }
+                        case 2 -> {
+                            System.out.println("\nDigite o dia do aniverersário: ");
+                            aniversario = scanner.nextInt();
+                            contas.cadastrar(new ContaPoupanca(contas.gerarNumero(),agencia,tipo,titular,saldo,aniversario));
+                        }
+                    }
                     keyPress();
                     break;
                 case 2:
-                    System.out.println("\nBuscar Todas as Contas");
+                    System.out.println("\nListar Todas as Contas");
+
+                    contas.listarTodas();
+
                     keyPress();
                     break;
                 case 3:
                     System.out.println("\nBuscar Conta por Numero");
+                    System.out.println("\nDigite o numero da conta: ");
+                    numero = scanner.nextInt();
+                    contas.procurarPorNumero(numero);
                     keyPress();
                     break;
                 case 4:
@@ -72,6 +99,11 @@ public class Menu {
                     break;
                 case 5:
                     System.out.println("\nApagar Conta");
+                    System.out.println("\nDigite o numero da conta: ");
+                    numero = scanner.nextInt();
+
+                    contas.deletar(numero);
+
                     keyPress();
                     break;
                 case 6:
